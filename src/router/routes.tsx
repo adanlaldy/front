@@ -1,6 +1,7 @@
 import React from 'react';
 import App from '../App';
 import Login from '../Login';
+import Register from '../Register';
 import { RouteObject } from 'react-router-dom';
 
 const routes: RouteObject[] = [
@@ -12,6 +13,10 @@ const routes: RouteObject[] = [
                 // index: true,
                 element: <Login />,
             },
+            {
+                path: 'register',
+                element: <Register />,
+            }
         ],
     },
 ];
