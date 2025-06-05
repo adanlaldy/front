@@ -6,17 +6,17 @@ import {Link} from "react-router-dom";
 
 const tutorialSteps = [
     {
-        image: "/src/assets/search-tuto.png",
+        image: "/assets/search-tuto.png",
         title: "Search",
         description: "Discover rarest finds that you might like and join the Auction for a chance to acquire it.",
     },
     {
-        image: "/src/assets/bid-tuto.png",
+        image: "/assets/bid-tuto.png",
         title: "Bid",
         description: "Compete with other bidders to be the Top Bidder to win the Auction!",
     },
     {
-        image: "/src/assets/win-tuto.png",
+        image: "/assets/win-tuto.png",
         title: "Win!",
         description: "After the Auction, only the Top Bidder will win the specific item placed. It will be delivered to the winner. Congrats!",
     },
@@ -84,5 +84,4 @@ export default function Tutorial() {
             </div>
         </div>
     );
-
 }

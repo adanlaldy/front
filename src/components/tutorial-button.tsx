@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 type TutorialButtonProps = {
     input: string;
-    onClick?: () => void; // ← Ajouté ici
+    onClick?: () => void;
 };
 
 export default function TutorialButton({ input, onClick }: TutorialButtonProps) {
