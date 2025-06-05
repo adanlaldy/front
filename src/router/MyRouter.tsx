@@ -1,10 +1,10 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import routes from "./routes.tsx";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import myRoutes from "./routes.tsx";
 
-const router = createBrowserRouter(routes)
+const router = createBrowserRouter(myRoutes)
 
 const MyRouter = () => {
-    return <RouterProvider router={router} />
+    return <RouterProvider router={router}/>
 }
 
-export default MyRouter;
+export default MyRouter
