@@ -84,5 +84,4 @@ export default function Tutorial() {
             </div>
         </div>
     );
-
 }

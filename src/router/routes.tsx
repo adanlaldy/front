@@ -3,6 +3,7 @@ import NotFound from "../components/not-found.tsx";
 import Login from '../Login';
 import Register from '../Register';
 import {RouteObject} from "react-router-dom";
+import Sidebar from "../components/sidebar.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -24,6 +25,10 @@ const myRoutes: RouteObject[] = [
             {
                 path: 'register',
                 element: <Register/>,
+            },
+            {
+                path: "test",
+                element: <Sidebar/>
             }
         ]
     }
