@@ -5,7 +5,6 @@ import { IUser } from "../types/user.type.ts";
 import { useGetCurrentUserQuery } from "../api/authApi.ts";
 function Home() {
     // This component serves as the home page of the application.
-    let points = 432;
     const {
         data: user,
         isLoading,
