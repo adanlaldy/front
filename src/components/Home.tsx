@@ -1,8 +1,8 @@
 import "../Home.css";
 // import Header from "./Header";
 // import React from "react";
-// import { IUser } from "../types/user.type.ts";
-// import { useGetCurrentUserQuery } from "../api/authApi.ts";
+import { IUser } from "../types/user.type.ts";
+import { useGetCurrentUserQuery } from "../api/authApi.ts";
 function Home() {
     // This component serves as the home page of the application.
     let points = 432;
@@ -24,10 +24,12 @@ function Home() {
     return (
         <div className="home-container">
             <h3>Available Gift Points</h3>
-            <p>{points} dBC</p>
+            <p>{user ? user.balance : -1} dBC</p>
             <h6 className="text-xs text-gray-500 mt-1">AS OF TODAY, {new Date().toLocaleDateString()}</h6>
             <img src="/assets/HomeIllustration.png" alt="Illustration" className="w-64 h-auto mx-auto" />
-            <h4>Welcome {user.firstName}, {user.lastName}!</h4>
+            <h4>
+                Welcome {user ? `${user.first_name}, ${user.last_name}` : "Guest"}!
+            </h4>
         </div>
     );
 }

@@ -44,9 +44,20 @@ export const authApi = createApi({
                 body, // ici on envoie le body
             }),
         }),
+
+        getCurrentUser: builder.query<
+            { id: string; email: string; name: string },
+            void
+        >({
+            query: () => ({
+                url: "/me",
+                method: "GET",
+            }),
+        }),
     }),
 });
 
 export const { useRegisterMutation } = registerApi;
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useGetCurrentUserQuery } = authApi;
+
