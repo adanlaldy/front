@@ -71,7 +71,7 @@ export default function Sidebar() {
                     </nav>
 
                     {/* Bas : settings, FAQ, logout */}
-                    <nav className="flex flex-col gap-4 pl-4 mt-4">
+                    <nav className="flex flex-col gap-4 pl-4 my-4">
                         <Link to="/settings" onClick={toggleSidebar} className="hover:text-blue-800 active:text-blue-800">
                             <div className="flex items-center text-gray-500">
                                 <Settings size={22}/>
