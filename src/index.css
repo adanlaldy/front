@@ -22,7 +22,9 @@ body {
   display: flex;
   place-items: center;
   min-height: 100vh;
-  overflow: hidden; /* <-- bloque tout scroll */
+  overflow: hidden;
+  /* <-- bloque tout scroll */
+  background-color: white;
 }
 
 h1 {

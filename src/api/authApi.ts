@@ -12,6 +12,24 @@ const baseQuery = fetchBaseQuery({
     }
 });
 
+export const registerApi = createApi({
+    reducerPath: "registerApi",
+    baseQuery,
+    endpoints: (builder) => ({
+        register: builder.mutation<
+            { message: string },
+            { firstName: string; lastName: string; birthDate: Date; email: string; password: string; role: "user" }
+        >({
+            query: (body) => ({
+                url: "/register",
+                method: "POST",
+                body, // ici on envoie le body
+            }),
+        }),
+    }),
+});
+
+
 export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery,
@@ -28,5 +46,7 @@ export const authApi = createApi({
         }),
     }),
 });
+
+export const { useRegisterMutation } = registerApi;
 
 export const { useLoginMutation } = authApi;

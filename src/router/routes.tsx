@@ -1,9 +1,10 @@
 import Tutorial from "../components/tutorial.tsx";
 import NotFound from "../components/not-found.tsx";
-import Login from '../Login';
-import Register from '../Register';
-import {RouteObject} from "react-router-dom";
+import Login from '../components/Login.tsx';
+import Register from '../components/Register.tsx';
+import { RouteObject } from "react-router-dom";
 import Sidebar from "../components/sidebar.tsx";
+import HomePage from "../components/Home.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -11,24 +12,28 @@ const myRoutes: RouteObject[] = [
         children: [
             {
                 path: "tutorial",
-                element: <Tutorial/>
+                element: <Tutorial />
             },
             {
                 path: 'login',
                 // index: true,
-                element: <Login/>,
+                element: <Login />,
             },
             {
                 path: "*",
-                element: <NotFound/>
+                element: <NotFound />
             },
             {
                 path: 'register',
-                element: <Register/>,
+                element: <Register />,
             },
             {
                 path: "test",
-                element: <Sidebar/>
+                element: <Sidebar />
+            },
+            {
+                path: "home",
+                element: <HomePage />
             }
         ]
     }
