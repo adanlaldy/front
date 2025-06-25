@@ -1,10 +1,23 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, Scale, Sparkles } from "lucide-react";
+import {
+    Home,
+    Scale,
+    Sparkles,
+    PlusCircle,
+    MessageCircle,
+} from "lucide-react";
 
 interface FooterProps {
-    active: "home" | "auction" | "winners";
-    onSelect: (section: "home" | "auction" | "winners") => void;
+    active: "home" | "auction" | "winners" | "auction-create" | "messages";
+    onSelect: (
+        section:
+            | "home"
+            | "auction"
+            | "winners"
+            | "auction-create"
+            | "messages"
+    ) => void;
 }
 
 const Footer: FC<FooterProps> = ({ active, onSelect }) => {
@@ -12,7 +25,14 @@ const Footer: FC<FooterProps> = ({ active, onSelect }) => {
     const baseStyle = "flex flex-col items-center justify-center flex-1 py-2";
     const iconSize = 20;
 
-    const handleClick = (section: "home" | "auction" | "winners") => {
+    const handleClick = (
+        section:
+            | "home"
+            | "auction"
+            | "winners"
+            | "auction-create"
+            | "messages"
+    ) => {
         onSelect(section);
 
         switch (section) {
@@ -24,6 +44,12 @@ const Footer: FC<FooterProps> = ({ active, onSelect }) => {
                 break;
             case "winners":
                 navigate("/bid-winners");
+                break;
+            case "auction-create":
+                navigate("/create-auction");
+                break;
+            case "messages":
+                navigate("/messages");
                 break;
         }
     };
@@ -43,6 +69,20 @@ const Footer: FC<FooterProps> = ({ active, onSelect }) => {
             >
                 <Scale size={iconSize} />
                 <span className="mt-1">AUCTION HOUSE</span>
+            </button>
+            <button
+                onClick={() => handleClick("auction-create")}
+                className={`${baseStyle} ${active === "auction-create" ? "text-blue-600" : ""}`}
+            >
+                <PlusCircle size={iconSize} />
+                <span className="mt-1">CREATE AUCTION</span>
+            </button>
+            <button
+                onClick={() => handleClick("messages")}
+                className={`${baseStyle} ${active === "messages" ? "text-blue-600" : ""}`}
+            >
+                <MessageCircle size={iconSize} />
+                <span className="mt-1">MESSAGES</span>
             </button>
             <button
                 onClick={() => handleClick("winners")}
