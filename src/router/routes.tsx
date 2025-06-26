@@ -5,6 +5,7 @@ import Register from '../components/Register.tsx';
 import { RouteObject } from "react-router-dom";
 import HomePage from "../components/Home.tsx";
 import Header from "../components/header.tsx";
+import Message from "../components/message.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -29,11 +30,15 @@ const myRoutes: RouteObject[] = [
             },
             {
                 path: "test",
-                element: <Header pageName={"test"}/>
+                element: <Header pageName={"test"} />
             },
             {
                 path: "home",
                 element: <HomePage />
+            },
+            {
+                path: "messages",
+                element: <Message /> // This is the messages page
             }
         ]
     }
