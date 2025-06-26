@@ -20,7 +20,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "types": ["node"], // ✅ pour reconnaître path, __dirname, etc.
+    "baseUrl": ".", // chemin relatif à la racine du projet
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "./src"

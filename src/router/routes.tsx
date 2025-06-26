@@ -2,11 +2,14 @@ import Tutorial from "../components/tutorial.tsx";
 import NotFound from "../components/not-found.tsx";
 import Login from '../components/Login.tsx';
 import Register from '../components/Register.tsx';
-import { RouteObject } from "react-router-dom";
+import {RouteObject} from "react-router-dom";
 import HomePage from "../components/Home.tsx";
 import Header from "../components/header.tsx";
 import AuctionHouse from "../components/auction-house.tsx";
 import CreateAuction from "../components/create-auction.tsx";
+import ProtectedRoute from "../components/protected-route.tsx";
+import AdminLayout from "../components/admin-layout.tsx";
+import UsersPageBackOffice from "@/components/users-page-back-office.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -14,20 +17,20 @@ const myRoutes: RouteObject[] = [
         children: [
             {
                 path: "tutorial",
-                element: <Tutorial />
+                element: <Tutorial/>
             },
             {
                 path: 'login',
                 // index: true,
-                element: <Login />,
+                element: <Login/>,
             },
             {
                 path: "*",
-                element: <NotFound />
+                element: <NotFound/>
             },
             {
                 path: 'register',
-                element: <Register />,
+                element: <Register/>,
             },
             {
                 path: "test",
@@ -35,7 +38,7 @@ const myRoutes: RouteObject[] = [
             },
             {
                 path: "home",
-                element: <HomePage />
+                element: <HomePage/>
             },
             {
                 path: "auction-house",
@@ -44,7 +47,25 @@ const myRoutes: RouteObject[] = [
             {
                 path: 'create-auction',
                 element: <CreateAuction/>
+            },
+            {
+                path: "/back-office",
+                element: <ProtectedRoute />, // ✅ Pas de children ici
+                children: [
+                    {
+                        path: "",
+                        element: <AdminLayout />, // ✅ C’est ici qu’on place AdminLayout
+                        children: [
+                            { path: "users", element: <UsersPageBackOffice /> },
+                            // { path: "purchases", element: <PurchasesPage /> },
+                            // { path: "conversations", element: <ConversationsPage /> },
+                            // { path: "messages", element: <MessagesPage /> },
+                            // { path: "auctions", element: <AuctionsPage /> },
+                        ]
+                    }
+                ]
             }
+
         ]
     }
 ]
