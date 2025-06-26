@@ -17,7 +17,7 @@ const Login: React.FC = () => {
         try {
             const res = await login({ email, password }).unwrap();
             console.log("Login successful:", res.message);
-
+            localStorage.setItem("user", JSON.stringify(res.user)); // pour récupérer id, role, name
             navigate("/home");
         } catch (err: any) {
             console.error("Login failed:", err);

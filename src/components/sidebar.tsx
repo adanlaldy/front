@@ -13,7 +13,7 @@ export default function Sidebar() {
 
     const links = [
         {to: "/home", label: "Home", icon: <House/>},
-        {to: "/auctions", label: "Auction House", icon: <Scale/>},
+        {to: "/auction-house", label: "Auction House", icon: <Scale/>},
         {to: "/winners", label: "Bid Winners", icon: <Sparkles/>},
     ];
 

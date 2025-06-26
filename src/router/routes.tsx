@@ -5,6 +5,8 @@ import Register from '../components/Register.tsx';
 import { RouteObject } from "react-router-dom";
 import HomePage from "../components/Home.tsx";
 import Header from "../components/header.tsx";
+import AuctionHouse from "../components/auction-house.tsx";
+import CreateAuction from "../components/create-auction.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -34,6 +36,14 @@ const myRoutes: RouteObject[] = [
             {
                 path: "home",
                 element: <HomePage />
+            },
+            {
+                path: "auction-house",
+                element: <AuctionHouse/>
+            },
+            {
+                path: 'create-auction',
+                element: <CreateAuction/>
             }
         ]
     }

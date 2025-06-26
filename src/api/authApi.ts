@@ -35,7 +35,7 @@ export const authApi = createApi({
     baseQuery,
     endpoints: (builder) => ({
         login: builder.mutation<
-            { token: string; message: string },
+            { token: string; message: string; user: { id: number; role: string; first_name: string; last_name: string } },
             { email: string; password: string }
         >({
             query: (body) => ({
