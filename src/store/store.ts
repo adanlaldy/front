@@ -8,6 +8,7 @@ import {picturesApi} from "../api/picturesApi.ts";
 import {fileApi} from "../api/fileApi.ts";
 import {tagApi} from "../api/tagApi.ts";
 import {usersApi} from "@/api/userApi.ts";
+import {purchasesApi} from "@/api/purchasesApi.ts";
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         [fileApi.reducerPath]: fileApi.reducer,
         [tagApi.reducerPath]: tagApi.reducer,
         [usersApi.reducerPath]: usersApi.reducer,
+        [purchasesApi.reducerPath]: purchasesApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -29,7 +31,8 @@ export const store = configureStore({
             picturesApi.middleware,
             fileApi.middleware,
             tagApi.middleware,
-            usersApi.middleware
+            usersApi.middleware,
+            purchasesApi.middleware
         ),
 });
 
