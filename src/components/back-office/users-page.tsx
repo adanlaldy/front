@@ -5,9 +5,9 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { IUser } from "../types/user.type";
+} from "@/components/ui/table.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card.tsx";
+import { IUser } from "../../types/user.type.ts";
 import { useGetAllUsersQuery, useUpdateUserByIdMutation } from "@/api/userApi.ts";
 import { toast } from "sonner";
 
@@ -17,14 +17,14 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+} from "@/components/ui/dropdown-menu.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover.tsx";
+import { Calendar } from "@/components/ui/calendar.tsx";
 import { format } from "date-fns";
 import { useState } from "react";
 
-export default function UsersPageBackOffice() {
+export default function UsersPage() {
     const { data: users, error, isLoading, refetch } = useGetAllUsersQuery();
     const [updateUserById] = useUpdateUserByIdMutation();
     const [openDatePickerId, setOpenDatePickerId] = useState<number | null>(null);
@@ -88,26 +88,25 @@ export default function UsersPageBackOffice() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>ID</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Role</TableHead>
-                            <TableHead>Created At</TableHead>
-                            <TableHead>Last Updated</TableHead>
-                            <TableHead>Deleted At</TableHead>
+                            <TableHead className="text-center align-middle">ID</TableHead>
+                            <TableHead className="text-center align-middle">Name</TableHead>
+                            <TableHead className="text-center align-middle">Email</TableHead>
+                            <TableHead className="text-center align-middle">Role</TableHead>
+                            <TableHead className="text-center align-middle">Created At</TableHead>
+                            <TableHead className="text-center align-middle">Last Updated</TableHead>
+                            <TableHead className="text-center align-middle">Deleted At</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {users?.map((user: IUser) => {
-                            // Use local update if exists, otherwise user.deleted_at from API
                             const deletedAt = localDeletedAtUpdates[user.id] ?? (user.deletedAt ? new Date(user.deletedAt) : null);
 
                             return (
                                 <TableRow key={user.id}>
-                                    <TableCell>{user.id}</TableCell>
-                                    <TableCell>{`${user.firstName} ${user.lastName}`}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
-                                    <TableCell className="capitalize">
+                                    <TableCell className="text-center align-middle">{user.id}</TableCell>
+                                    <TableCell className="text-center align-middle">{`${user.firstName} ${user.lastName}`}</TableCell>
+                                    <TableCell className="text-center align-middle">{user.email}</TableCell>
+                                    <TableCell className="text-center align-middle capitalize">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="outline" size="sm">
@@ -127,13 +126,13 @@ export default function UsersPageBackOffice() {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="text-center align-middle">
                                         {new Date(user.createdAt).toLocaleDateString()}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="text-center align-middle">
                                         {new Date(user.updatedAt).toLocaleDateString()}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="text-center align-middle">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="outline" size="sm">
@@ -161,7 +160,6 @@ export default function UsersPageBackOffice() {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
 
-                                        {/* Date Picker Popover */}
                                         {openDatePickerId === user.id && (
                                             <Popover open={true}>
                                                 <PopoverTrigger asChild>

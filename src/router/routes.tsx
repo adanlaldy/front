@@ -9,7 +9,8 @@ import AuctionHouse from "../components/auction-house.tsx";
 import CreateAuction from "../components/create-auction.tsx";
 import ProtectedRoute from "../components/protected-route.tsx";
 import AdminLayout from "../components/admin-layout.tsx";
-import UsersPageBackOffice from "@/components/users-page-back-office.tsx";
+import UsersPage from "@/components/back-office/users-page.tsx";
+import PurchasesPage from "@/components/back-office/purchases-page.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -50,14 +51,14 @@ const myRoutes: RouteObject[] = [
             },
             {
                 path: "/back-office",
-                element: <ProtectedRoute />, // ✅ Pas de children ici
+                element: <ProtectedRoute />,
                 children: [
                     {
                         path: "",
-                        element: <AdminLayout />, // ✅ C’est ici qu’on place AdminLayout
+                        element: <AdminLayout />,
                         children: [
-                            { path: "users", element: <UsersPageBackOffice /> },
-                            // { path: "purchases", element: <PurchasesPage /> },
+                            { path: "users", element: <UsersPage /> },
+                            { path: "purchases", element: <PurchasesPage /> },
                             // { path: "conversations", element: <ConversationsPage /> },
                             // { path: "messages", element: <MessagesPage /> },
                             // { path: "auctions", element: <AuctionsPage /> },
