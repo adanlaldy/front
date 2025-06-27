@@ -1,6 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IUser } from "../types/user.type.ts";
 
+function toCamelCase(obj: any): any {
+    if (Array.isArray(obj)) return obj.map(toCamelCase);
+    if (obj !== null && obj.constructor === Object) {
+        return Object.fromEntries(
+            Object.entries(obj).map(([key, val]) => [
+                key.replace(/_([a-z])/g, (_, c) => c.toUpperCase()), // snake_case to camelCase
+                toCamelCase(val),
+            ])
+        );
+    }
+    return obj;
+}
+
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://localhost:3001/v1/users",
     credentials: "include",
@@ -21,6 +34,7 @@ export const usersApi = createApi({
         // GET /users
         getAllUsers: builder.query<IUser[], void>({
             query: () => "/",
+            transformResponse: (response: any) => toCamelCase(response),
             providesTags: ["Users"],
         }),
 
