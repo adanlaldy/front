@@ -29,8 +29,11 @@ export default function UsersPage() {
     const [updateUserById] = useUpdateUserByIdMutation();
     const [openDatePickerId, setOpenDatePickerId] = useState<number | null>(null);
 
-    // New state: track locally updated deleted_at per user id
     const [localDeletedAtUpdates, setLocalDeletedAtUpdates] = useState<Record<number, Date | null>>({});
+
+    const [showActive, setShowActive] = useState(true);
+    const [showDeactivated, setShowDeactivated] = useState(true);
+    const [showAdmins, setShowAdmins] = useState(true);
 
     const handleRoleChange = async (id: number, newRole: string) => {
         try {
@@ -44,7 +47,6 @@ export default function UsersPage() {
     };
 
     const handleDeletedAtChange = async (id: number, date: Date | null) => {
-        // Optimistically update UI immediately
         setLocalDeletedAtUpdates((prev) => ({
             ...prev,
             [id]: date,
@@ -55,17 +57,12 @@ export default function UsersPage() {
                 id,
                 data: { deletedAt: date ? date.toISOString() : null },
             }).unwrap();
-            toast.success(
-                date
-                    ? `User ${id} deactivated`
-                    : `User ${id} reactivated`
-            );
+            toast.success(date ? `User ${id} deactivated` : `User ${id} reactivated`);
             refetch();
         } catch (err) {
             toast.error("Failed to update account status");
             console.error("Failed to update deletedAt", err);
 
-            // Rollback optimistic update on error
             setLocalDeletedAtUpdates((prev) => {
                 const newState = { ...prev };
                 delete newState[id];
@@ -79,12 +76,64 @@ export default function UsersPage() {
     if (isLoading) return <div>Loading users...</div>;
     if (error) return <div>Error loading users.</div>;
 
+    const filteredUsers = users?.filter((user) => {
+        const deletedAt = localDeletedAtUpdates[user.id] ?? (user.deletedAt ? new Date(user.deletedAt) : null);
+        const isActive = !deletedAt;
+        const isDeactivated = !!deletedAt;
+        const isAdmin = user.role === "admin";
+
+        return (
+            ((showActive && isActive) || (showDeactivated && isDeactivated)) &&
+            (showAdmins || !isAdmin)
+        );
+    });
+
     return (
         <Card className="w-full shadow-lg">
             <CardHeader>
                 <CardTitle>Users</CardTitle>
             </CardHeader>
             <CardContent>
+                {/* Checkbox Filters */}
+                <div className="flex space-x-6 mb-4">
+                    <div className="flex items-center space-x-2">
+                        <input
+                            id="filter-active"
+                            type="checkbox"
+                            checked={showActive}
+                            onChange={() => setShowActive(!showActive)}
+                            className="h-4 w-4"
+                        />
+                        <label htmlFor="filter-active" className="select-none cursor-pointer">
+                            Active
+                        </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <input
+                            id="filter-deactivated"
+                            type="checkbox"
+                            checked={showDeactivated}
+                            onChange={() => setShowDeactivated(!showDeactivated)}
+                            className="h-4 w-4"
+                        />
+                        <label htmlFor="filter-deactivated" className="select-none cursor-pointer">
+                            Deactivated
+                        </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <input
+                            id="filter-admins"
+                            type="checkbox"
+                            checked={showAdmins}
+                            onChange={() => setShowAdmins(!showAdmins)}
+                            className="h-4 w-4"
+                        />
+                        <label htmlFor="filter-admins" className="select-none cursor-pointer">
+                            Admins
+                        </label>
+                    </div>
+                </div>
+
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -98,7 +147,7 @@ export default function UsersPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {users?.map((user: IUser) => {
+                        {filteredUsers?.map((user: IUser) => {
                             const deletedAt = localDeletedAtUpdates[user.id] ?? (user.deletedAt ? new Date(user.deletedAt) : null);
 
                             return (

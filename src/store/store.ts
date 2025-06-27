@@ -3,7 +3,7 @@ import {setupListeners} from "@reduxjs/toolkit/query";
 import {authApi} from "../api/authApi.ts";
 import {notificationsApi} from "../api/notificationsApi.ts";
 import { registerApi } from "../api/authApi.ts";
-import {auctionApi} from "../api/auctionsApi.ts";
+import {auctionsApi} from "../api/auctionsApi.ts";
 import {picturesApi} from "../api/picturesApi.ts";
 import {fileApi} from "../api/fileApi.ts";
 import {tagApi} from "../api/tagApi.ts";
@@ -15,7 +15,7 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         [notificationsApi.reducerPath]: notificationsApi.reducer,
         [registerApi.reducerPath]: registerApi.reducer,
-        [auctionApi.reducerPath]: auctionApi.reducer,
+        [auctionsApi.reducerPath]: auctionsApi.reducer,
         [picturesApi.reducerPath]: picturesApi.reducer,
         [fileApi.reducerPath]: fileApi.reducer,
         [tagApi.reducerPath]: tagApi.reducer,
@@ -27,7 +27,7 @@ export const store = configureStore({
             authApi.middleware,
             notificationsApi.middleware,
             registerApi.middleware,
-            auctionApi.middleware,
+            auctionsApi.middleware,
             picturesApi.middleware,
             fileApi.middleware,
             tagApi.middleware,
