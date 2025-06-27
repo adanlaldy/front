@@ -1,8 +1,10 @@
-import { NavLink } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 import { cn } from "@/lib/utils.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { LogOut } from "lucide-react";
+import {useLogoutMutation} from "@/api/authApi.ts";
+import { toast } from "sonner";
 
 const navItems = [
     { label: "Users", path: "/back-office/users" },
@@ -11,8 +13,25 @@ const navItems = [
 ];
 
 export default function Sidebar() {
-    const handleLogout = () => {
-        console.log("Logout clicked");
+    const navigate = useNavigate();
+    const [logoutApi] = useLogoutMutation();
+
+    const handleLogout = async () => {
+        try {
+            await logoutApi().unwrap();
+
+            // Clear local storage
+            localStorage.removeItem("user");
+
+            // Show toast
+            toast.success("Successfully logged out.");
+
+            // Redirect to login
+            navigate("/login");
+        } catch (error) {
+            toast.error("Logout failed. Please try again.");
+            console.error("Logout failed", error);
+        }
     };
 
     return (

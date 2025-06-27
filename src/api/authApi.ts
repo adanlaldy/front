@@ -54,10 +54,17 @@ export const authApi = createApi({
                 method: "GET",
             }),
         }),
+
+        logout: builder.mutation<{ message: string }, void>({
+            query: () => ({
+                url: "/logout",
+                method: "DELETE",
+            }),
+        }),
     }),
 });
 
 export const { useRegisterMutation } = registerApi;
 
-export const { useLoginMutation, useGetCurrentUserQuery } = authApi;
+export const { useLoginMutation, useGetCurrentUserQuery, useLogoutMutation } = authApi;
 
