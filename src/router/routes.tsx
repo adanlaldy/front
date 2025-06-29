@@ -5,7 +5,8 @@ import Register from '../components/Register.tsx';
 import { RouteObject } from "react-router-dom";
 import HomePage from "../components/Home.tsx";
 import Header from "../components/header.tsx";
-import Message from "../components/message.tsx";
+import ConversationsPage from "../components/conversations.tsx";
+import Messages from "../components/messages.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -38,7 +39,11 @@ const myRoutes: RouteObject[] = [
             },
             {
                 path: "messages",
-                element: <Message /> // This is the messages page
+                element: <ConversationsPage /> // This is the messages page
+            },
+            {
+                path: "messages/conversation/:id",
+                element: <Messages /> // This is the conversation detail page
             }
         ]
     }

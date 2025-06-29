@@ -1,10 +1,9 @@
-// src/pages/Conversations.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Footer from "../components/footer.tsx";
+import Footer from "./footer.tsx";
 import { IUser } from "../types/user.type.ts";
 import { useGetCurrentUserQuery } from "../api/authApi.ts";
-
+import { useNavigate } from "react-router-dom"; // ← ajoute ça
 
 type Conversation = {
     id: number;
@@ -15,6 +14,8 @@ type Conversation = {
 };
 
 const ConversationsPage: React.FC = () => {
+    const navigate = useNavigate(); // ← hook pour redirection
+
     const {
         data: user,
         isLoading: userLoading,
@@ -30,11 +31,10 @@ const ConversationsPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const baseUrl = "http://localhost:3001/v1";
-
-    const userId = user?.id; // 👈 attention à ne pas l’utiliser si user est undefined
+    const userId = user?.id;
 
     useEffect(() => {
-        if (!userId) return; // 👈 on attend que user soit défini
+        if (!userId) return;
 
         const fetchConversations = async () => {
             try {
@@ -53,12 +53,28 @@ const ConversationsPage: React.FC = () => {
         fetchConversations();
     }, [userId]);
 
-    // 👉 tout ce bloc en dessous des hooks
+    const handleNewConversation = async () => {
+        if (!userId) return;
+
+        const newConversation = {
+            user1Id: userId,
+            user2Id: 2, // ← à rendre dynamique si besoin
+        };
+
+        try {
+            const response = await axios.post(`${baseUrl}/conversations/`, newConversation);
+            setConversations((prev) => [...prev, response.data]);
+        } catch (err) {
+            console.error("Erreur lors de la création de la conversation :", err);
+            alert("Impossible de créer une nouvelle conversation.");
+        }
+    };
+
     if (userLoading || loading) return <p>Chargement...</p>;
     if (userError || !user || error) return <p>{error ?? "Erreur lors du chargement."}</p>;
 
     return (
-        <div className="p-6">
+        <div className="p-6 relative">
             <h1 className="text-2xl font-bold mb-4">Mes Conversations</h1>
             {conversations.length === 0 ? (
                 <p>Aucune conversation trouvée.</p>
@@ -69,21 +85,37 @@ const ConversationsPage: React.FC = () => {
                             conv.user1_id === user.id ? conv.user2_id : conv.user1_id;
 
                         return (
-                            <li key={conv.id} className="p-4 border rounded-lg shadow">
-                                <p>
+                            <li
+                                key={conv.id}
+                                className="p-4 border rounded-lg shadow hover:bg-gray-50 transition"
+                            >
+                                <button
+                                    onClick={() => navigate(`/messages/conversation/${conv.id}`)}
+                                    className="text-blue-600 hover:underline"
+                                >
                                     Utilisateur : {otherUserId}
-                                </p>
+                                </button>
                             </li>
                         );
                     })}
                 </ul>
             )}
+
             <Footer
                 active="messages"
                 onSelect={(section) => {
                     console.log(`Selected section: ${section}`);
                 }}
             />
+
+            {/* Bouton + flottant */}
+            <button
+                onClick={handleNewConversation}
+                className="fixed bottom-20 right-6 bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold rounded-full w-14 h-14 flex items-center justify-center shadow-lg"
+                aria-label="Nouvelle conversation"
+            >
+                +
+            </button>
         </div>
     );
 };
