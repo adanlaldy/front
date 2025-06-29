@@ -2,7 +2,7 @@ import Tutorial from "../components/tutorial.tsx";
 import NotFound from "../components/not-found.tsx";
 import Login from '../components/Login.tsx';
 import Register from '../components/Register.tsx';
-import {RouteObject, Navigate} from "react-router-dom";
+import { RouteObject, Navigate } from "react-router-dom";
 import HomePage from "../components/Home.tsx";
 import Header from "../components/header.tsx";
 import AuctionHouse from "../components/auction-house.tsx";
@@ -12,6 +12,8 @@ import AdminLayout from "../components/back-office/admin-layout.tsx";
 import UsersPage from "@/components/back-office/users-page.tsx";
 import PurchasesPage from "@/components/back-office/purchases-page.tsx";
 import AuctionsPage from "@/components/back-office/auctions-page.tsx";
+import ConversationsPage from "../components/conversations.tsx";
+import Messages from "../components/messages.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -19,36 +21,36 @@ const myRoutes: RouteObject[] = [
         children: [
             {
                 path: "tutorial",
-                element: <Tutorial/>
+                element: <Tutorial />
             },
             {
                 path: 'login',
                 // index: true,
-                element: <Login/>,
+                element: <Login />,
             },
             {
                 path: "*",
-                element: <NotFound/>
+                element: <NotFound />
             },
             {
                 path: 'register',
-                element: <Register/>,
+                element: <Register />,
             },
             {
                 path: "test",
-                element: <Header pageName={"test"}/>
+                element: <Header pageName={"test"} />
             },
             {
                 path: "home",
-                element: <HomePage/>
+                element: <HomePage />
             },
             {
                 path: "auction-house",
-                element: <AuctionHouse/>
+                element: <AuctionHouse />
             },
             {
                 path: 'create-auction',
-                element: <CreateAuction/>
+                element: <CreateAuction />
             },
             {
                 path: "back-office",
@@ -65,6 +67,14 @@ const myRoutes: RouteObject[] = [
                         ]
                     }
                 ]
+            },
+            {
+                path: "messages",
+                element: <ConversationsPage /> // This is the messages page
+            },
+            {
+                path: "messages/conversation/:id",
+                element: <Messages /> // This is the conversation detail page
             }
         ]
     }
