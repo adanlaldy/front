@@ -40,7 +40,7 @@ export default function AuctionHouse() {
                                 <div>
                                     <h2 className="text-lg font-semibold">{auction.title}</h2>
                                     <p className="text-sm text-gray-500">
-                                        Starts at ~{auction.initial_price} dBC
+                                        Starts at ~{auction.initialPrice} dBC
                                     </p>
                                 </div>
                                 {isOpen ? <ChevronUp /> : <ChevronDown />}
@@ -66,16 +66,16 @@ export default function AuctionHouse() {
                                         {auction.description}
                                     </p>
                                     <div className="text-sm text-gray-600">
-                                        <p>Prix de départ : {auction.initial_price} dBC</p>
-                                        <p>Prix actuel : {auction.actual_bid_price} dBC</p>
+                                        <p>Prix de départ : {auction.initialPrice} dBC</p>
+                                        <p>Prix actuel : {auction.actualBidPrice} dBC</p>
                                         <p>
                                             Débute le :{" "}
-                                            {new Date(auction.start_bid_date).toLocaleString()}
+                                            {new Date(auction.startBidDate).toLocaleString()}
                                         </p>
-                                        {auction.end_bid_date && (
+                                        {auction.endBidDate && (
                                             <p>
                                                 Se termine le :{" "}
-                                                {new Date(auction.end_bid_date).toLocaleString()}
+                                                {new Date(auction.endBidDate).toLocaleString()}
                                             </p>
                                         )}
                                     </div>
