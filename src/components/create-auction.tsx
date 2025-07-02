@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import Header from "./header.tsx";
 import Footer from "./footer.tsx";
 import { useCreateFileMutation } from "../api/fileApi.ts";
-import {useCreateAuctionMutation} from "../api/auctionsApi.ts";
+import { useCreateAuctionMutation } from "../api/auctionsApi.ts";
 
 export default function CreateAuction() {
     const [form, setForm] = useState({
         title: "",
         description: "",
-        file_id: 0,
         initial_price: 0,
         start_bid_date: "",
         end_bid_date: null as string | null,
@@ -27,7 +26,7 @@ export default function CreateAuction() {
             try {
                 const parsed = JSON.parse(user);
                 if (parsed?.id) {
-                    setForm(prev => ({ ...prev, seller_id: parsed.id }));
+                    setForm((prev) => ({ ...prev, seller_id: parsed.id }));
                 }
             } catch (e) {
                 console.error("Erreur localStorage user:", e);
@@ -35,9 +34,11 @@ export default function CreateAuction() {
         }
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
-        setForm(prev => ({
+        setForm((prev) => ({
             ...prev,
             [name]: name === "end_bid_date" && value === "" ? null : value,
         }));
@@ -62,34 +63,41 @@ export default function CreateAuction() {
         }
 
         try {
-            let fileId = form.file_id;
+            let fileId: number | undefined = undefined;
 
+            // Si un fichier est sélectionné, on l'upload d'abord
             if (selectedFile) {
                 const reader = new FileReader();
                 const fileReadPromise = new Promise<string>((resolve, reject) => {
                     reader.onload = () => resolve((reader.result as string).split(",")[1]);
                     reader.onerror = reject;
                 });
-
                 reader.readAsDataURL(selectedFile);
                 const base64 = await fileReadPromise;
 
                 const uploadedFile = await createFile({
                     content: base64,
-                    content_type: selectedFile.type,
+                    contentType: selectedFile.type,
                 }).unwrap();
 
-                fileId = uploadedFile.id;
+                fileId = uploadedFile.file?.id;
             }
 
+            // Prépare les données pour la création de l'enchère
             const auctionToCreate = {
-                ...form,
-                file_id: fileId,
-                actual_bid_price: form.initial_price,
-                tag_id: 1,
-                seller_id: form.seller_id,
-                state_id: 3,
+                title: form.title,
+                description: form.description,
+                initialPrice: form.initial_price,
+                startBidDate: form.start_bid_date,
+                endBidDate: form.end_bid_date,
+                sellerId: form.seller_id,
+                tagName: "Art",
+                pictures: [],
+                ...(fileId !== undefined ? { fileId } : {}), // n'ajoute fileId que s'il existe
             };
+
+
+            console.log("Data envoyée :", auctionToCreate);
 
             const createdAuction = await createAuction(auctionToCreate).unwrap();
             console.log("Auction créée :", createdAuction);
@@ -100,46 +108,77 @@ export default function CreateAuction() {
         }
     };
 
-
     return (
         <>
             <Header pageName={"Create Auction"} />
             <main style={{ padding: "1rem", maxWidth: 600, margin: "auto" }}>
                 <h1>Create Auction</h1>
                 <form onSubmit={handleSubmit}>
-
                     <label>
                         Title
-                        <input type="text" name="title" value={form.title} onChange={handleChange} required />
+                        <input
+                            type="text"
+                            name="title"
+                            value={form.title}
+                            onChange={handleChange}
+                            required
+                        />
                     </label>
 
                     <label>
                         Description
-                        <textarea name="description" value={form.description} onChange={handleChange} rows={4} required />
+                        <textarea
+                            name="description"
+                            value={form.description}
+                            onChange={handleChange}
+                            rows={4}
+                            required
+                        />
                     </label>
 
                     <label>
                         Select File
-                        <input type="file" onChange={handleFileChange} accept="image/*,application/pdf" />
+                        <input
+                            type="file"
+                            onChange={handleFileChange}
+                            accept="image/*,application/pdf"
+                        />
                     </label>
 
-                    {selectedFile && (
-                        <p>Fichier sélectionné : <strong>{selectedFile.name}</strong></p>
-                    )}
+                    {selectedFile && <p>Fichier sélectionné : <strong>{selectedFile.name}</strong></p>}
 
                     <label>
                         Initial Price
-                        <input type="number" name="initial_price" value={form.initial_price} onChange={handleChange} min={0} step="0.01" required />
+                        <input
+                            type="number"
+                            name="initial_price"
+                            value={form.initial_price}
+                            onChange={handleChange}
+                            min={0}
+                            step="0.01"
+                            required
+                        />
                     </label>
 
                     <label>
                         Start Bid Date
-                        <input type="datetime-local" name="start_bid_date" value={form.start_bid_date} onChange={handleChange} required />
+                        <input
+                            type="datetime-local"
+                            name="start_bid_date"
+                            value={form.start_bid_date}
+                            onChange={handleChange}
+                            required
+                        />
                     </label>
 
                     <label>
                         End Bid Date
-                        <input type="datetime-local" name="end_bid_date" value={form.end_bid_date ?? ""} onChange={handleChange} />
+                        <input
+                            type="datetime-local"
+                            name="end_bid_date"
+                            value={form.end_bid_date ?? ""}
+                            onChange={handleChange}
+                        />
                     </label>
 
                     <button type="submit" style={{ marginTop: "1rem" }}>
