@@ -14,6 +14,7 @@ import PurchasesPage from "@/components/back-office/purchases-page.tsx";
 import AuctionsPage from "@/components/back-office/auctions-page.tsx";
 import ConversationsPage from "../components/conversations.tsx";
 import Messages from "../components/messages.tsx";
+import SettingsPage from "@/components/settings-page.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -75,6 +76,10 @@ const myRoutes: RouteObject[] = [
             {
                 path: "messages/conversation/:id",
                 element: <Messages /> // This is the conversation detail page
+            },
+            {
+                path: "settings",
+                element: <SettingsPage/>
             }
         ]
     }
