@@ -52,6 +52,11 @@ export default function Bid() {
     const [states, setStates] = useState<{ id: number; stateType: string }[]>([]);
     const [bidInput, setBidInput] = useState<string>(""); // état pour l'input enchère
 
+    // Récupérer l'id utilisateur dans le localStorage
+    const storedUser = localStorage.getItem("user");
+    const localUserBalance = storedUser ? JSON.parse(storedUser).balance : undefined;
+
+
     useEffect(() => {
         async function fetchAuction() {
             try {
@@ -123,10 +128,10 @@ export default function Bid() {
 
             const totalBid = actualBidPrice + bidValue;
 
-            // if (totalBid > userData.balance) {
-            //     alert(`Solde insuffisant. Votre balance est de ${userData.balance} dBC, mais votre enchère totale est de ${totalBid} dBC.`);
-            //     return;
-            // }
+            if (totalBid > localUserBalance) {
+                alert(`Solde insuffisant. Votre balance est de ${localUserBalance} dBC, mais votre enchère totale est de ${totalBid} dBC.`);
+                return;
+            }
 
             // Requête PUT pour mettre à jour l'enchère
             const resPut = await fetch(`http://localhost:3000/v1/auction/${id}`, {
