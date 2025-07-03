@@ -17,6 +17,7 @@ import Messages from "../components/messages.tsx";
 import SettingsPage from "@/components/settings-page.tsx";
 import FAQPage from "@/components/faq-page.tsx";
 import AuctionCard from "../components/auction.tsx";
+import Bid from "@/components/bid.tsx";
 
 const myRoutes: RouteObject[] = [
     {
@@ -91,6 +92,10 @@ const myRoutes: RouteObject[] = [
                 path: "faq",
                 element: <FAQPage />
             },
+            {
+                path: "bid/:id",
+                element: <Bid />
+            }
         ]
     }
 ]

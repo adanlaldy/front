@@ -28,15 +28,29 @@ type User = {
     lastname: string;
 };
 
-export default function AuctionCard() {
+type UserBalanceResponse = {
+    id: number;
+    first_name: string;
+    last_name: string;
+    birth_date: string;
+    email: string;
+    picture: string | null;
+    balance: number;
+    role: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
+
+export default function Bid() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [auction, setAuction] = useState<Auction | null>(null);
-    const [seller, setSeller] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [liked, setLiked] = useState(false);
     const [states, setStates] = useState<{ id: number; stateType: string }[]>([]);
+    const [bidInput, setBidInput] = useState<string>(""); // état pour l'input enchère
 
     useEffect(() => {
         async function fetchAuction() {
@@ -55,7 +69,6 @@ export default function AuctionCard() {
                 setLoading(false);
             }
         }
-
         fetchAuction();
     }, [id]);
 
@@ -72,6 +85,7 @@ export default function AuctionCard() {
         buyerId,
         startBidDate,
         endBidDate,
+        stateId,
     } = auction;
 
     const now = new Date();
@@ -84,15 +98,63 @@ export default function AuctionCard() {
             ? `Fin : ${end.toLocaleString()}`
             : "En cours";
 
+    const imageUrl = fileId
+        ? `http://localhost:3000/v1/picture/byFileId/${fileId}`
+        : "https://via.placeholder.com/600x300?text=Aucune+image";
 
+    // Fonction appelée au clic sur le bouton ENCHÉRIR
+    async function handleBid() {
+        if (!bidInput) {
+            alert("Veuillez entrer une valeur d'enchère valide.");
+            return;
+        }
 
-    // const imageUrl = fileId
-    //     ? `http://localhost:3000/v1/picture/byFileId/${fileId}`
-    //     : "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.peugeot.fr%2F&psig=AOvVaw25OtV68jahsrWy-_9AyeUG&ust=1751622090230000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCOCS-vWyoI4DFQAAAAAdAAAAABAE";
+        const bidValue = Number(bidInput);
+        if (isNaN(bidValue) || bidValue <= 0) {
+            alert("Veuillez entrer un nombre valide supérieur à 0.");
+            return;
+        }
 
-    const imageUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.peugeot.fr%2F&psig=AOvVaw25OtV68jahsrWy-_9AyeUG&ust=1751622090230000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCOCS-vWyoI4DFQAAAAAdAAAAABAE"
+        try {
+            // Récupérer l'utilisateur et sa balance
+            // const resUser = await fetch("http://localhost:3001/v1/users/me");
+            // if (!resUser.ok) throw new Error("Impossible de récupérer les informations utilisateur.");
+            // const userData: UserBalanceResponse = await resUser.json();
 
-    const isAuctionStarted = start <= now;
+            const totalBid = actualBidPrice + bidValue;
+
+            // if (totalBid > userData.balance) {
+            //     alert(`Solde insuffisant. Votre balance est de ${userData.balance} dBC, mais votre enchère totale est de ${totalBid} dBC.`);
+            //     return;
+            // }
+
+            // Requête PUT pour mettre à jour l'enchère
+            const resPut = await fetch(`http://localhost:3000/v1/auction/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ actualBidPrice: totalBid }),
+            });
+
+            if (!resPut.ok) {
+                const errMsg = await resPut.text();
+                throw new Error(`Erreur lors de la mise à jour de l'enchère: ${errMsg}`);
+            }
+
+            // Met à jour localement le prix d'enchère pour refléter le changement sans recharger
+            setAuction(prev => prev ? { ...prev, actualBidPrice: totalBid } : prev);
+
+            alert(`Enchère acceptée ! Vous avez misé ${bidValue} dBC, nouveau prix actuel : ${totalBid} dBC.`);
+
+            // Réinitialise l'input
+            setBidInput("");
+
+            navigate("/home");
+        } catch (error: any) {
+            alert("Erreur lors de l'enchère : " + (error.message || error));
+        }
+    }
 
     return (
         <div style={{ fontFamily: "sans-serif", paddingBottom: 110 }}>
@@ -140,16 +202,16 @@ export default function AuctionCard() {
                     <strong>~{initialPrice} dBC</strong>{" "}
                     <span
                         style={{
-                            backgroundColor: "#27c193",
+                            backgroundColor: stateId === 2 /* exemple d’état fermé ? */ ? "#ff5f5f" : "#27c193",
                             color: "#fff",
                             padding: "2px 6px",
                             fontSize: 12,
                             borderRadius: 4,
                         }}
                     >
-                        {states.map((state) =>
+                        {states.map((state) => (
                             state.id === auction.stateId ? state.stateType : ""
-                        )}{" "}
+                        ))}
                         <br />
                     </span>
                 </p>
@@ -177,40 +239,43 @@ export default function AuctionCard() {
                             {start > now ? "DÉBUT DE L'ENCHÈRE" : "FIN DE L'ENCHÈRE"}
                         </span>
                     </div>
-                    <div>
-                        🧑 {buyerId ?? "Aucun"}
-                        <br />
-                        <span style={{ color: "#888" }}>ACHETEUR ACTUEL</span>
-                    </div>
                 </div>
 
-                <p style={{ fontSize: 13, lineHeight: 1.5, color: "#444" }}>{description}</p>
+                <input
+                    type="number"
+                    value={bidInput}
+                    onChange={(e) => setBidInput(e.target.value)}
+                    placeholder="Entrez votre enchère, exemple: 4, 5..."
+                    style={{
+                        width: "100%",
+                        padding: 8,
+                        fontSize: 16,
+                        borderRadius: 4,
+                        border: "1px solid #ccc",
+                        marginBottom: 16,
+                    }}
+                />
             </div>
 
             {/* Bouton ENCHÉRIR Fixe */}
             <div
+                onClick={handleBid}  // déclenche la vérification et mise à jour au clic
                 style={{
                     position: "fixed",
                     bottom: 70,
                     left: 0,
                     width: "100%",
-                    backgroundColor: isAuctionStarted ? "#2b49ff" : "#999",
+                    backgroundColor: "#2b49ff",
                     color: "#fff",
                     textAlign: "center",
                     padding: 16,
                     fontWeight: "bold",
                     fontSize: 16,
-                    cursor: isAuctionStarted ? "pointer" : "not-allowed",
+                    cursor: "pointer",
                     zIndex: 1000,
-                    userSelect: "none",
                 }}
-                onClick={() => {
-                    if (!isAuctionStarted) return;
-                    navigate(`/bid/${auction.id}`);
-                }}
-                aria-disabled={!isAuctionStarted}
             >
-                ENCHÉRIR
+                ENCHÉRIR MAINTENANT
             </div>
 
             <Footer
