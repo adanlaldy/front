@@ -1,15 +1,24 @@
 "use client";
 
 import {useState} from "react";
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {Menu, X, House, Scale, Sparkles, Settings, CircleHelp, LogOut} from "lucide-react";
 import Profile from "./profile.tsx";
 
 export default function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const toggleSidebar = () => setIsOpen(!isOpen);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax;";
+        toggleSidebar();
+        navigate("/login", { replace: true });
+    };
 
     const links = [
         {to: "/home", label: "Home", icon: <House/>},
@@ -84,17 +93,18 @@ export default function Sidebar() {
                                 <span className="pl-4 text-sm">FAQ</span>
                             </div>
                         </Link>
-                        <Link to="/logout" onClick={toggleSidebar} className="hover:text-blue-800 active:text-blue-800">
-                            <div className="flex items-center text-gray-500">
-                                <LogOut size={22}/>
-                                <span className="pl-4 text-sm">Logout</span>
-                            </div>
-                        </Link>
+                        {/* Logout button replacing the Link */}
+                        <button
+                            onClick={handleLogout}
+                            className="flex items-center text-gray-500 hover:text-blue-800 active:text-blue-800 focus:outline-none"
+                            type="button"
+                        >
+                            <LogOut size={22} />
+                            <span className="pl-4 text-sm">Logout</span>
+                        </button>
                     </nav>
                 </div>
             </aside>
-
-
         </>
     );
 }

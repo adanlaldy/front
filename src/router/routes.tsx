@@ -14,6 +14,8 @@ import PurchasesPage from "@/components/back-office/purchases-page.tsx";
 import AuctionsPage from "@/components/back-office/auctions-page.tsx";
 import ConversationsPage from "../components/conversations.tsx";
 import Messages from "../components/messages.tsx";
+import SettingsPage from "@/components/settings-page.tsx";
+import FAQPage from "@/components/faq-page.tsx";
 import AuctionCard from "../components/auction.tsx";
 
 const myRoutes: RouteObject[] = [
@@ -80,7 +82,15 @@ const myRoutes: RouteObject[] = [
             {
                 path: "auction/:id",
                 element: <AuctionCard />
-            }
+            },
+            {
+                path: "settings",
+                element: <SettingsPage />
+            },
+            {
+                path: "faq",
+                element: <FAQPage />
+            },
         ]
     }
 ]
