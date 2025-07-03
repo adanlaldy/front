@@ -42,8 +42,10 @@ export const auctionsApi = createApi({
         // GET /auctions/:id
         getAuctionById: builder.query<IAuction, number>({
             query: (id) => `/${id}`,
-            providesTags: (_result, _err, id) => [{ type: "Auctions", id }],
+            transformResponse: (response: any) => toCamelCase(response.auction), // <-- ici on retourne uniquement auction
+            providesTags: (_result, _error, id) => [{ type: "Auctions", id }],
         }),
+
 
         // POST /auctions
         createAuction: builder.mutation<IAuction, Partial<IAuction>>({
