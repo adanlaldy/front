@@ -85,7 +85,7 @@ const myRoutes: RouteObject[] = [
             {
                 path: "faq",
                 element: <FAQPage/>
-            }
+            },
         ]
     }
 ]
