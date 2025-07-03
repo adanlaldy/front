@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 interface FooterProps {
-    active: "home" | "auction" | "winners" | "auction-create" | "messages";
+    active: "home" | "auction" | "winners" | "auction-create" | "messages" | "";
     onSelect: (
         section:
             | "home"
@@ -17,6 +17,7 @@ interface FooterProps {
             | "winners"
             | "auction-create"
             | "messages"
+            | ""
     ) => void;
 }
 
@@ -32,6 +33,7 @@ const Footer: FC<FooterProps> = ({ active, onSelect }) => {
             | "winners"
             | "auction-create"
             | "messages"
+            | ""
     ) => {
         onSelect(section);
 

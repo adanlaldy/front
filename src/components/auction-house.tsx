@@ -1,13 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ⬅️ ajout
 import Header from "./header.tsx";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useGetAllAuctionsQuery } from "../api/auctionsApi.ts";
-//import { IAuction } from "../types/auction.type.ts";
 import { useGetPicturesByAuctionIdQuery } from "../api/picturesApi.ts";
 
 export default function AuctionHouse() {
     const { data: auctions = [], isLoading, error } = useGetAllAuctionsQuery();
     const [openAuctionId, setOpenAuctionId] = useState<number | null>(null);
+    const navigate = useNavigate(); // ⬅️ initialisation du hook
 
     const toggleDropdown = (auctionId: number) => {
         setOpenAuctionId(openAuctionId === auctionId ? null : auctionId);
@@ -65,7 +66,7 @@ export default function AuctionHouse() {
                                     <p className="text-gray-700 text-sm mb-2">
                                         {auction.description}
                                     </p>
-                                    <div className="text-sm text-gray-600">
+                                    <div className="text-sm text-gray-600 mb-4">
                                         <p>Prix de départ : {auction.initialPrice} dBC</p>
                                         <p>Prix actuel : {auction.actualBidPrice} dBC</p>
                                         <p>
@@ -79,6 +80,14 @@ export default function AuctionHouse() {
                                             </p>
                                         )}
                                     </div>
+
+                                    {/* Bouton de redirection */}
+                                    <button
+                                        onClick={() => navigate(`/auction/${auction.id}`)}
+                                        className="bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                                    >
+                                        Voir l'enchère
+                                    </button>
                                 </div>
                             )}
                         </div>
