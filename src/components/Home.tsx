@@ -163,6 +163,14 @@ function Home() {
             await refetch();
             await refetchPurchases();
 
+            // 🟢 Mettre à jour le localStorage avec le nouveau solde
+            const storedUserStr = localStorage.getItem("user");
+            if (storedUserStr) {
+                const storedUser = JSON.parse(storedUserStr);
+                storedUser.balance = newBalance;
+                localStorage.setItem("user", JSON.stringify(storedUser));
+            }
+
             setIsModalOpen(false);
             setAmountToAdd(0);
         } catch (err) {
